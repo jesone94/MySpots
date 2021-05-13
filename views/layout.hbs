@@ -1,0 +1,65 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <link
+      href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css'
+      rel='stylesheet'
+      integrity='sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0'
+      crossorigin='anonymous'
+    />
+    <link rel='preconnect' href='https://fonts.gstatic.com' />
+    <link
+      href='https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap'
+      rel='stylesheet'
+    />
+    <head>
+      <script
+        src='https://api-maps.yandex.ru/2.1/?apikey=2322008a-6ba1-4826-80ab-3a2e3f20738f&lang=ru_RU'
+        type='text/javascript'
+      >
+      </script>
+
+    </head>
+    <title>MySpots</title>
+  </head>
+  <body>
+    {{#if userLogined}}
+      <nav class='navbar navbar-dark bg-dark'>
+        <a
+          class='navbar-brand align-self-start'
+          href='/user/{{userLogined.name}}'
+          style="font-family: 'Gloria Hallelujah', cursive; font-size: 40px;"
+        >My Spots</a>
+
+        <ul class='nav align-self-center'>
+          <li class='nav-item'>
+            <a
+              class='nav-link'
+              aria-current='page'
+              href='/user/{{userLogined.name}}'
+              style='color: white; '
+            >Мои места</a>
+          </li>
+          <li class='nav-item'>
+            <a class='nav-link' href='/create' style='color: white; '>Создать</a>
+          </li>
+          <li class='nav-item'>
+            <a class='nav-link' href='#' style='color: white; '>Избранное</a>
+          </li>
+          <li class='nav-item'>
+            <a class='nav-link' href='/logout' style='color: white; '>Выйти</a>
+          </li>
+
+        </ul>
+      </nav>
+    {{/if}}
+    {{{body}}}
+  </body>
+  <script
+    src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js'
+    integrity='sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8'
+    crossorigin='anonymous'
+  ></script>
+</html>
