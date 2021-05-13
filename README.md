@@ -16,6 +16,6 @@ App to locate your spots and friends
 # Какие технологии Будут использоваться(предварительно)
 
 * Node.js
-* Vue.js
+* Handlebars
 * API Яндекс.Карты
-* БД - по ходу разработки
+* БД - MongoDB
