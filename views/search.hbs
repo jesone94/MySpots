@@ -1,0 +1,16 @@
+{{#if user}}
+  <div class='container d-flex justify-content-center mt-5'>
+    <div class="card" style="width: 18rem;">
+  <img src="" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{user.username}}</h5>
+    
+    <a href="/user/{{userLogined.name}}/friends/{{user._id}}" class="btn btn-dark">Добавить</a>
+  </div>
+</div>
+  </div>
+{{else}}
+  <div class='container d-flex justify-content-center mt-5'>
+    <span style="font-family: 'Gloria Hallelujah', cursive; font-size: 30px;">Sorry,but we didn`t
+      find anything. Try again</span>
+{{/if}}

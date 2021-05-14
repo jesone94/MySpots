@@ -49,7 +49,7 @@ router
       const newuser = await User.create(user);
 
       req.session.user = { id: newuser._id, name: newuser.username };
-      res.redirect(`/${newuser.username}`);
+      res.redirect(`/user/${newuser.username}`);
     } catch (error) {
       console.log(error);
     }
@@ -69,7 +69,7 @@ router.route('/logout').get(async (req, res) => {
   }
 });
 
-router.route('/user/:username').get((req, res) => {
+router.route('/user/:username').get(async (req, res) => {
   res.render('user');
 });
 
@@ -86,7 +86,63 @@ router.route('/user/:username/create').post(async (req, res) => {
     { username: req.params.username },
     { $push: { spots: newSpot._id } }
   );
-  res.render('/user/:username');
+  res.redirect(`/user/${req.params.username}`);
 });
 
+router.route('/user/:username/spots').get(async (req, res) => {
+  const user = await User.findOne({ username: req.params.username }).populate('spots').lean();
+  const spots = user.spots;
+
+  res.json(spots);
+});
+
+router.route('/user/:username/friends').get(async (req, res) => {
+  const user = await User.findOne({ username: req.params.username }).populate('friends').lean();
+  const friends = user.friends;
+  if (friends.length !== 0) {
+    res.render('friends', { friends });
+  } else {
+    res.render('friends');
+  }
+});
+
+router.route('/search').post(async (req, res) => {
+  const user = await User.findOne({ username: req.body.username });
+
+  res.render('search', { user });
+});
+
+router.route('/user/:username/spots/:spotid').delete(async (req, res) => {
+  const user = await User.findOne({ username: req.params.username }).lean();
+  console.log(req.params.spotid.toString());
+  console.log(user.spots);
+  const updateSpots = user.spots.filter((el) => String(el) !== String(req.params.spotid));
+
+  const updateUser = await User.findOneAndUpdate(
+    { username: req.params.username },
+    { spots: updateSpots }
+  );
+  res.json('ok');
+});
+
+router.route('/user/:username/friends/:friendId').get(async (req, res) => {
+  console.log(req.params.friendId);
+  const user = await User.findOneAndUpdate(
+    { username: req.params.username },
+    { $push: { friends: req.params.friendId } }
+  );
+  res.redirect(`/user/${req.params.username}/friends`);
+});
+
+router.route('/spots/:username').get(async (req, res) => {
+  const friend = await User.findOne({ username: req.params.username });
+  res.render('friendspots', { friend });
+});
+
+router.route('/spots/:username/getspots').get(async (req, res) => {
+  const user = await User.findOne({ username: req.params.username }).populate('spots').lean();
+  const spots = user.spots;
+
+  res.json(spots);
+});
 module.exports = router;

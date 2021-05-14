@@ -26,9 +26,9 @@
   </head>
   <body>
     {{#if userLogined}}
-      <nav class='navbar navbar-dark bg-dark'>
+      <nav class='navbar navbar-dark bg-dark d-flex justify-content-evenly'>
         <a
-          class='navbar-brand align-self-start'
+          class='navbar-brand'
           href='/user/{{userLogined.name}}'
           style="font-family: 'Gloria Hallelujah', cursive; font-size: 40px;"
         >My Spots</a>
@@ -43,6 +43,10 @@
             >Мои места</a>
           </li>
           <li class='nav-item'>
+            <a class='nav-link' href='/user/{{userLogined.name}}/friends' style='color: white; '>Мои
+              друзья</a>
+          </li>
+          <li class='nav-item'>
             <a class='nav-link' href='/create' style='color: white; '>Создать</a>
           </li>
           <li class='nav-item'>
@@ -53,6 +57,16 @@
           </li>
 
         </ul>
+        <form class='d-flex align-self-center' method='POST' action='/search'>
+          <input
+            class='form-control me-2'
+            type='search'
+            placeholder='Ник друга'
+            aria-label='Search'
+            name='username'
+          />
+          <button class='btn btn-outline-primary' type='submit'>Поиск</button>
+        </form>
       </nav>
     {{/if}}
     {{{body}}}
