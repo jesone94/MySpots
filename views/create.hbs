@@ -1,4 +1,8 @@
-<div class='container'>
+<div class='container d-flex justify-content-center mt-5'>
+  <span style="font-family: 'Gloria Hallelujah', cursive; font-size: 30px;">Share your spot</span>
+</div>
+
+<div class='container mt-5'>
   <div class='row'>
     <div class='col'>
       <div id='map' style='width: 600px; height: 400px'></div>
@@ -17,7 +21,7 @@
         <div class='row mb-3'>
           <label for='inputPassword3' class='col-sm-2 col-form-label'>Название спота</label>
           <div class='col-sm-10'>
-            <input type='text' class='form-control' id='inputPassword3' name='name' />
+            <input type='text' class='form-control' id='inputPassword3' name='name' required />
           </div>
         </div>
 
@@ -28,6 +32,7 @@
             id='exampleFormControlTextarea1'
             rows='4'
             name='description'
+            required
           ></textarea>
         </div>
         <input type='text' class='form-control' id='coords' style='display: none;' name='coords' />
