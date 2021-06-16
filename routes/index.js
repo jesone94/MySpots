@@ -5,6 +5,7 @@ const Spot = require('../models/spot');
 const multer = require('multer');
 const cloudinary = require('cloudinary');
 const { storage } = require('../cloudinary');
+const { sessionChecker } = require('../middleware/auth');
 
 const upload = multer({ storage });
 
@@ -69,15 +70,15 @@ router.route('/logout').get(async (req, res) => {
   }
 });
 
-router.route('/user/:username').get(async (req, res) => {
+router.route('/user/:username').get(sessionChecker, async (req, res) => {
   res.render('user');
 });
 
-router.route('/create').get((req, res) => {
+router.route('/create').get(sessionChecker, (req, res) => {
   res.render('create');
 });
 
-router.route('/user/:username/create').post(async (req, res) => {
+router.route('/user/:username/create').post(sessionChecker, async (req, res) => {
   const spot = req.body;
 
   spot.coords = JSON.parse(spot.coords);
@@ -89,14 +90,14 @@ router.route('/user/:username/create').post(async (req, res) => {
   res.redirect(`/user/${req.params.username}`);
 });
 
-router.route('/user/:username/spots').get(async (req, res) => {
+router.route('/user/:username/spots').get(sessionChecker, async (req, res) => {
   const user = await User.findOne({ username: req.params.username }).populate('spots').lean();
   const spots = user.spots;
 
   res.json(spots);
 });
 
-router.route('/user/:username/friends').get(async (req, res) => {
+router.route('/user/:username/friends').get(sessionChecker, async (req, res) => {
   const user = await User.findOne({ username: req.params.username }).populate('friends').lean();
   const friends = user.friends;
   if (friends.length !== 0) {
@@ -106,13 +107,13 @@ router.route('/user/:username/friends').get(async (req, res) => {
   }
 });
 
-router.route('/search').post(async (req, res) => {
+router.route('/search').post(sessionChecker, async (req, res) => {
   const user = await User.findOne({ username: req.body.username });
 
   res.render('search', { user });
 });
 
-router.route('/user/:username/spots/:spotid').delete(async (req, res) => {
+router.route('/user/:username/spots/:spotid').delete(sessionChecker, async (req, res) => {
   const user = await User.findOne({ username: req.params.username }).lean();
   console.log(req.params.spotid.toString());
   console.log(user.spots);
@@ -125,7 +126,7 @@ router.route('/user/:username/spots/:spotid').delete(async (req, res) => {
   res.json('ok');
 });
 
-router.route('/user/:username/friends/:friendId').get(async (req, res) => {
+router.route('/user/:username/friends/:friendId').get(sessionChecker, async (req, res) => {
   console.log(req.params.friendId);
   const user = await User.findOneAndUpdate(
     { username: req.params.username },
@@ -134,15 +135,36 @@ router.route('/user/:username/friends/:friendId').get(async (req, res) => {
   res.redirect(`/user/${req.params.username}/friends`);
 });
 
-router.route('/spots/:username').get(async (req, res) => {
+router.route('/spots/:username').get(sessionChecker, async (req, res) => {
   const friend = await User.findOne({ username: req.params.username });
   res.render('friendspots', { friend });
 });
 
-router.route('/spots/:username/getspots').get(async (req, res) => {
+router.route('/spots/:username/getspots').get(sessionChecker, async (req, res) => {
   const user = await User.findOne({ username: req.params.username }).populate('spots').lean();
   const spots = user.spots;
 
   res.json(spots);
 });
+
+router.route('/spots/:username/addfeatures/:spotid').put(sessionChecker, async (req, res) => {
+  await User.findByIdAndUpdate(
+    { _id: res.locals.userLogined.id },
+    { $push: { favorites: req.params.spotid } }
+  );
+
+  res.json(res.locals.userLogined.name);
+});
+
+router.route('/user/:username/favorites').get(sessionChecker, (req, res) => {
+  res.render('favorites');
+});
+
+router.route('/user/:username/favorites/spots').get(sessionChecker, async (req, res) => {
+  const user = await User.findOne({ username: req.params.username }).populate('favorites').lean();
+  const spots = user.favorites;
+
+  res.json(spots);
+});
+
 module.exports = router;

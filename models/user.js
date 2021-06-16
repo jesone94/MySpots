@@ -19,8 +19,8 @@ const User = new Schema({
     type: String,
     required: true,
   },
-  friends: [{ type: Schema.Types.ObjectId, ref: 'users', unique: true }],
+  friends: [{ type: Schema.Types.ObjectId, ref: 'users' }],
   spots: [{ type: Schema.Types.ObjectId, ref: 'spots' }],
-  favorites: [{ type: Schema.Types.ObjectId, ref: 'spots', unique: true }],
+  favorites: [{ type: Schema.Types.ObjectId, ref: 'spots' }],
 });
 module.exports = model('users', User);

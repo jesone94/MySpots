@@ -111,3 +111,20 @@ CustomSearchProvider.prototype.geocode = function (request, options) {
 };
 
 ymaps.ready(init);
+
+document.addEventListener('click', async (ev) => {
+  if (ev.target.className === 'btn btn-warning') {
+    const url = window.location.href + '/addfeatures/' + ev.target.id;
+    console.log(url);
+    let response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+    });
+
+    let ok = await response.json();
+    console.log(ok);
+    window.location.replace(`/user/${ok}`);
+  }
+});
