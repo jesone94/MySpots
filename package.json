@@ -4,8 +4,7 @@
   "description": "App to locate your spots and friends",
   "main": "app.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
